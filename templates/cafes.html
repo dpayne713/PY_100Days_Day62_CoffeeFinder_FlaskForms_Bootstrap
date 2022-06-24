@@ -1,0 +1,87 @@
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block title %}Restaurants{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h1>All Cafes</h1>
+
+	  <table class="table">
+          <thead>
+            {% for x in cafes[0].keys() %}
+                <th scope="col">{{ x }}</th>
+            {% endfor %}
+          </thead>
+            <tbody>
+
+                {% for x in cafes %}
+                <tr>
+                    <td>{{ x['Cafe Name'] }}</td>
+                    <td><a href="{{ x['Location'] }}">Maps Link</a></td>
+                    <td>{{ x['Open'] }}</td>
+                    <td>{{ x['Close'] }}</td>
+                    <td>{{ x['Coffee'] }}</td>
+                    <td>{{ x['Wifi'] }}</td>
+                    <td>{{ x['Power'] }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+  	  </table>
+
+    <!-- Button trigger modal -->
+<button type="button" id="modalOn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Add a cafe
+</button>
+
+        <!-- Modal -->
+<div class="modal fade" id="cafeAddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title " id="exampleModalLabel">Add a new cafe into the database</h3>
+        <button type="button" class="btn btn-dark" id="closeModal" aria-label="Close">X</button>
+      </div>
+      <div class="modal-body">
+
+          <form method="post" action="/add">
+              {{ form.csrf_token }}
+              {{ wtf.quick_form(form) }}
+          </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+    <script>
+        onBtn = document.getElementById("modalOn")
+        onBtn.addEventListener('click', function() {
+            $("#cafeAddModal").modal('show')
+        })
+        closeModal = document.getElementById('closeModal')
+        closeModal.addEventListener('click', function (){
+            $('#cafeAddModal').modal('hide')
+        })
+    </script>
+{% endblock %}
